@@ -1,0 +1,43 @@
+Final Year Project Idea Generation - Rough Notes
+Planned project:
+* Full-stack web application
+* Machine learning component focused on predictive data analysis
+* Potentially cloud or distributed backend for added complexity
+Key focus:
+* Show understanding of predictive modelling, system design, integration, and architecture
+* Prioritise complexity and depth of knowledge over volume of code
+* Explore how predictive modelling, backend architecture, and frontend design interact to form a complete system
+Research – Past Projects and Analysis
+Coursify – A College Course Recommendation Engine (2023)
+* Relevance: Demonstrates a full-stack recommendation system and how data cleaning, processing, and filtering can be used to generate personalised results.
+* Technology: Jupyter Notebook, Pandas, Django, Bootstrap, MongoDB, SpaCy
+* Limitations: Uses basic keyword-based filtering, lacks predictive modelling, and has limited scalability.
+* Potential improvements: Integrate predictive analysis to anticipate user interests, adopt a more modern and scalable tech stack (Node.js, React), and include a distributed backend or cloud deployment for real-world use.
+Predicting YouTube Category Growth Using Machine Learning (2023)
+* Relevance: Focuses on predictive modelling and data visualisation within a real-world media domain, using datasets and APIs to forecast category growth. Highlights the potential of time-series forecasting in content analytics.
+* Technology: Typescript, NodeJS, JavaScript, NextJS, AWS, Python, Linear and Naïve Bayes regression as ML Algorithms.
+* Limitations: Lacks full-stack implementation and a distributed or cloud backend.
+* Potential improvements: Build a complete interactive application around the predictive model, incorporate real-time forecasting from APIs, include data pipelines and backend services, and deploy the system in the cloud.
+Disease Prediction App (2023)
+* Relevance: AI chatbot for predicting diseases based on symptoms.
+* Technology: Python, Flutter, Random Forest ML Algorithm.
+* Limitations: Limited dataset, no voice-to-text feature, basic chatbot.
+* Potential improvements: Use a larger dataset, add voice-to-text, and improve backend connectivity.
+Potential Projects
+Condition Risk Prediction Platform
+* Description: A web or mobile application that predicts the likelihood of specific health conditions based on user-reported symptoms and lifestyle data. The system does not function as a chatbot; instead, it generates explainable risk scores, visualises prediction confidence, and offers insights into contributing factors.
+* Improvements over past projects: focusses on data privacy and ethical handling, supports cloud deployment, adds interactive visual analytics for condition risk, and goes beyond simple symptom matching to incorporate explainable predictive modelling.
+
+Thoughts: May be too similar to Disease Prediction app??
+Digital Content Trend Forecasting Platform
+* Description: A predictive analytics dashboard that uses real-time data from public APIs (such as social media and video platforms) to predict new trends in digital content categories. The system provides useful insights into audience engagement and growth trends and is presented as a tool for business intelligence, marketing strategy, and cultural analysis.
+Thoughts: May be a bit too niche, incase second reader/person marking might think it it too trivial/think I am not taking fyp seriously focusing on social media market growth? Might be difficult for testing/ willingness for businesses to test
+Predictive Health Insights Platform
+* Description: A comprehensive health tracking application that uses predictive analytics to forecast metrics such as disease risk, BMI changes, or stress levels over time based on user data, kind of like flo? But for general health instead of just menstrual health.
+* Improvements over past work: Combines predictive modelling with secure data storage and privacy features, integrates ethical considerations, and transforms raw health data into actionable insights, extending functionality beyond basic tracking.
+
+Thoughts: more meaningful, impactful and aligned with real world issues. Can get real world data sets, probably easier to get a usergroup
+
+Summary
+All three proposed directions build on previous work but extend their scope by integrating predictive modelling, architectural design, explainable AI, and optional cloud or distributed components. This aligns with the emphasis on system complexity and depth of knowledge in the current rubric.
+
