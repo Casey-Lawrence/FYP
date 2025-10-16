@@ -1,0 +1,51 @@
+This week, I completed the feasibility study (questions 1–10) and created a questionnaire to get user opinions and needs regarding turbulence prediction. The questions included:
+
+How often do you fly per year? (0–4, 4–10, 10+)
+How concerned are you about turbulence on a scale of 1–10 (1 = not concerned, 10 = extremely concerned)?
+Do you currently use any apps or websites to check turbulence before flying? (Yes/No)
+How useful would it be to see flight-specific turbulence forecasts? (1 = not useful, 10 = extremely useful)
+Which type of information would you prefer? (Timeline prediction, visual maps, comfort rating, other)
+Would calming tips or exercises in an app be helpful? (Yes/No)
+How much time before a flight would you check turbulence information? (1–6 hr, 6–12 hr, 12–24 hr, 24–36 hr)
+What features would make you most likely to use a turbulence prediction app regularly? (Simple, easy-to-understand interface; practical tips for staying comfortable during turbulence; ability to check turbulence for multiple flights/routes; access to historical data)
+How much detail about turbulence would you like? (In-depth information vs. brief overview)
+Would you be interested in comparing turbulence levels between different flights or routes before booking? (Yes/No/Maybe)
+
+From the responses:
+
+Most participants are infrequent flyers (0–4 flights per year) and are more concerned about turbulence, though some regular flyers also expressed concern.
+Almost all respondents currently do not use apps or websites to check turbulence. However, most think it would be very useful to see flight-specific forecasts, especially within 1–6 hours before a flight.
+Preferred information includes comfort ratings, visual maps, timeline predictions, and practical tips or calming exercises to manage anxiety.
+Key desired features include a simple, easy-to-use interface, the ability to check multiple flights/routes, and access to historical turbulence data.
+Most users want just a basic overview, though highly concerned flyers would like more in-depth details.
+There is strong interest in comparing turbulence across flights or routes before booking.
+
+Insights:
+This shows there is a clear need for an app that provides quick, easy-to-understand turbulence information, helps users feel more comfortable, and allows them to plan for calmer flights.
+
+Supervisor Discussion &amp; Next Steps:
+I spoke with my supervisor about my project. He advised that I focus on identifying the most valuable data and establishing a ground truth, which will serve as the reference for training my machine learning model.
+
+We also discussed the potential for achieving a 1:1 in my final year project. He explained that this is possible if I integrate complexity into the project and execute it thoroughly. He suggested looking at the NOAA world map interface as inspiration(as i had told him i was looking at that but it was very complex) but adapting it to be suitable for general users rather than meteorologists or pilots.&nbsp;
+
+If I can construct a metric from EDR/turbulence data and have it run on a schedule (every 30 minutes, 1 hour, or 6 hours), I can evaluate how far in advance it is possible to predict turbulence with reasonable accuracy (e.g., 85–95%). The main goal is to determine whether I can warn passengers of expected turbulence before their flights.
+
+Research into potential ground truth sources may include weather observation balloons or drones.
+
+Useful Data Sources to Research:
+
+PIREPs/AIREPs: Pilot/aircraft reports (North Atlantic flights, U.S.)
+
+SIGMETs: Worldwide aviation warnings
+
+TAFs: Worldwide forecast conditions
+
+METARs: Worldwide current conditions
+
+Official sources:
+
+https://www.metoffice.gov.uk/
+
+https://aviationweather.gov/
+
+I was able to extract some data from these sources, but this week I will focus on gathering meaningful data that can serve as my ground truth and be used to train my model, to ensure it is fully feasible.
