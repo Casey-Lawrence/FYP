@@ -1,0 +1,35 @@
+This week, I focused on data exploration for my project. I compiled and organised key aviation datasets to understand how they can be used for turbulence prediction.
+
+I gathered:
+
+ICAO codes for major global airports across North America, Europe, the Middle East, Asia-Pacific, South America, and Africa.
+
+Flight Information Regions (FIRs), along with their issuing organisations and WMO code prefixes, to see how SIGMETs are structured and distributed.
+
+Bounding boxes for geographic queries (e.g., Ireland: 49.5, -11.0, 59.0, 2.0).
+
+I explored several aviation weather data sources using the aviationweather.gov API:
+
+METARs (observations) – decoded examples to extract wind, visibility, temperature, pressure, and cloud layers.
+
+TAFs (forecasts) – analysed change groups such as TEMPO, PROB30, and BECMG.
+
+PIREPs – examined pilot reports of turbulence, understanding their structure (location, time, flight level, aircraft type, turbulence severity).
+
+SIGMETs – analysed global turbulence warnings, focusing on headers, issuing centres, validity windows, and severity.
+
+From this, I started outlining a correlation approach(Its not strict, its more just so i could visualise the data i collected and experiment what was possible):
+
+Use SIGMETs as ground truth.
+
+Collect corresponding METAR/TAF data from within the SIGMET's region.
+
+Parse both datasets into structured formats.
+
+Match features (wind speed, cloud cover, pressure, etc.) against turbulence events to create labelled data.
+
+I also installed the geopy package to support coordinate calculations when mapping airports and FIRs to SIGMET regions.
+
+Insights:
+This exploration showed that while PIREPs provide direct turbulence reports, they have limited coverage. SIGMETs are global and can serve as a reliable ground truth. Combining them with METAR/TAF data provides the features needed to train and test my model.
+
