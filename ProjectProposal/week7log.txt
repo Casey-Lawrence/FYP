@@ -1,0 +1,7 @@
+This week, I focused on progressing the Requirements Analysis and System Design stages of my project.
+I completed the detailed Use Case 1 – Get Flight Turbulence Forecast, including the main, alternative, and error flows, as well as the related non-functional requirements.
+I finalised the Requirements Matrix, refining it to include realistic and achievable features for both User and Admin roles.
+I also designed and documented the Use Case Diagram for the AeroCast system, identifying the main actors (User, Admin, and Weather Data API) and outlining how they interact with the system.
+I updated the preconditions and non-functional requirements to ensure they accurately reflect the system's intended behaviour and scope.
+
+Tomorrow, I plan to start drafting the remaining four use case narratives and continue developing sections for my Interim Report
