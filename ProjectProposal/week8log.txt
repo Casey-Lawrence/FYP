@@ -1,0 +1,8 @@
+This week, I focused on completing the remaining sections of the Feasibility Study and finalised the main use cases, non-functional requirements, and test case planning for the interim report.
+
+I also focused on the data integration side of the project, specifically testing how real aviation data can be collected and used within the system. I integrated the AviationStack API with aviationweather.gov data sources (METAR, TAF, and SIGMET) to retrieve live flight and weather information and began analysing how these datasets could be combined to detect turbulence patterns.
+
+As part of this, I built a local prototype to visualise and test the data flow, ensuring that information from multiple APIs could be matched and processed correctly. This helped confirm the feasibility of connecting flight and weather data ahead of developing the prediction model.
+
+Next week, I plan to review and refine my documentation ensuring all requirements and use cases are fully aligned for the interim report.
+
