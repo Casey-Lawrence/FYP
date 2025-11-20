@@ -1,14 +1,17 @@
 from flask import Flask, render_template, request
 import requests
-import math
 import os
 from airports import AIRPORTS, AIRPORT_LOOKUP
-
 
 app = Flask(__name__)
 
 AVIATIONSTACK_KEY = os.getenv("AVIATIONSTACK_KEY")
 
+def get_airport_name(icao):
+    info = AIRPORT_LOOKUP.get(icao)
+    if info:
+        return info["name"]
+    return icao
 
 def interpret_metar(metar):
     metar = metar.upper()
@@ -59,7 +62,9 @@ def home():
                 dep_icao = flight_info["departure"].get("icao")
                 arr_icao = flight_info["arrival"].get("icao")
                 airline = flight_info["airline"]["name"]
-                route = f"{dep_icao} ➜ {arr_icao}"
+                dep_name = get_airport_name(dep_icao)
+                arr_name = get_airport_name(arr_icao)
+                route = f"{dep_name} ({dep_icao}) -> {arr_name} ({arr_icao})"
                 status = flight_info.get("flight_status", "unknown").capitalize()
                 
             else:
