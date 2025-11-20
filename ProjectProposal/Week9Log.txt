@@ -1,0 +1,7 @@
+This week I spent a lot of time working on my interim report. I completed several sections, improved the structure, and refined the writing so everything reads more clearly. I'll be finishing the remaining parts next week.
+
+I also continued researching my data sources and tested different aviation APIs, including AviationStack, AviationWeather.gov, and OpenSky. This helped me get a better understanding of the data I'll eventually be working with and some of the limitations around real-time flight information.
+
+I met with my supervisor too, and we discussed expectations for the interim. We talked about putting together a very simple preliminary model, using an appropriate cost function for evaluation, and thinking about how different users might perceive over- or under-predictions differently.
+
+Overall, it was a productive week and set me up well for the next stage of work.
