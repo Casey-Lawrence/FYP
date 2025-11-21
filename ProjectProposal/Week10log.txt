@@ -1,0 +1,7 @@
+This week I focused mainly on polishing up my interim report and continuing the development of my prototype. I also had a meeting with my supervisor, which helped me get a better idea of what I should prioritise over the next while.
+
+In the meeting, we went through a few general points about the project. He encouraged me to keep things practical. He told me i need to have a basic ML model for the interim, and can improve it for the final project.
+
+We also talked briefly about looking into GitHub continuous integration and setting up a couple of unit tests, even simple ones, just so I can start building good structure around the project. He made the point that a failing test is sometimes more useful than one that passes, because it actually shows what needs fixing.
+
+Outside of the meeting, I  started uploading my code to GitHub and organising everything properly. I spent a good chunk of time finishing the last parts of my interim report and continued building out the prototype so the frontend and backend parts are coming together more cleanly.
