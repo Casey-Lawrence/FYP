@@ -85,6 +85,21 @@
             .addTo(routeMap)
             .bindPopup("Arrival Airport");
     }
+
+    // Draw route line between airports
+    if (mapData.dep_lat && mapData.arr_lat) {
+    const routeLine = L.polyline(
+        [
+            [mapData.dep_lat, mapData.dep_lon],
+            [mapData.arr_lat, mapData.arr_lon]
+        ],
+        { color: "blue", weight: 3, opacity: 0.7 }
+    ).addTo(routeMap);
+
+    // Fit map to route
+    routeMap.fitBounds(routeLine.getBounds(), { padding: [40, 40] });
+}
+
 </script>
 {% endif %}
 
