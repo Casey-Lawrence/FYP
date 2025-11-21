@@ -90,6 +90,13 @@ def home():
             if any(x in combined for x in ["SEV", "SQ", "+TS", "FC"]):
                 risk = "Severe"
 
+            calming = None
+            if risk in ["Moderate", "Severe"]:
+                calming = (
+                    "Turbulence can feel uncomfortable but is rarely dangerous. "
+                    "Fasten your seatbelt and take slow, deep breaths. "
+                    "Aircraft are designed to handle these conditions safely."
+                )
 
             dep_summary = interpret_metar(metar_dep)
             arr_summary = interpret_metar(metar_arr)
@@ -101,6 +108,7 @@ def home():
                 "status": status,
                 "source": source,
                 "risk": risk,
+                "calming": calming,
                 "dep_summary": dep_summary,
                 "arr_summary": arr_summary,
             }
