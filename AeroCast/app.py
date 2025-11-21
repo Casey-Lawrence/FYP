@@ -101,8 +101,21 @@ def home():
             dep_summary = interpret_metar(metar_dep)
             arr_summary = interpret_metar(metar_arr)
 
-            map_data = {"center_lat": 50.0, "center_lon": 0.0}
+            # Map data (departure + arrival airports only)
+            dep_info = AIRPORT_LOOKUP.get(dep_icao)
+            arr_info = AIRPORT_LOOKUP.get(arr_icao)
 
+            if dep_info and arr_info:
+                map_data = {
+                    "dep_lat": dep_info["lat"],
+                    "dep_lon": dep_info["lon"],
+                    "arr_lat": arr_info["lat"],
+                    "arr_lon": arr_info["lon"],
+                    "center_lat": (dep_info["lat"] + arr_info["lat"]) / 2,
+                    "center_lon": (dep_info["lon"] + arr_info["lon"]) / 2,
+                }
+            else:
+                map_data = {"center_lat": 50.0, "center_lon": 0.0}
 
             data = {
                 "flight": flight,

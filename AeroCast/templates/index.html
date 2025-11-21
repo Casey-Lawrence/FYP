@@ -71,6 +71,20 @@
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 8
     }).addTo(routeMap);
+
+    // Departure marker
+    if (mapData.dep_lat && mapData.dep_lon) {
+        L.marker([mapData.dep_lat, mapData.dep_lon])
+            .addTo(routeMap)
+            .bindPopup("Departure Airport");
+    }
+
+    // Arrival marker
+    if (mapData.arr_lat && mapData.arr_lon) {
+        L.marker([mapData.arr_lat, mapData.arr_lon])
+            .addTo(routeMap)
+            .bindPopup("Arrival Airport");
+    }
 </script>
 {% endif %}
 
