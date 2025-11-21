@@ -2,10 +2,12 @@ from flask import Flask, render_template, request
 import requests
 import os
 from airports import AIRPORTS, AIRPORT_LOOKUP
+import re
 
 app = Flask(__name__)
 
 AVIATIONSTACK_KEY = os.getenv("AVIATIONSTACK_KEY")
+
 
 def get_airport_name(icao):
     info = AIRPORT_LOOKUP.get(icao)
@@ -47,6 +49,11 @@ def home():
 
     if request.method == "POST":
         flight = request.form.get("flight").strip().upper()
+        #Validate flight number
+        pattern = r"^[A-Z]{2,3}[0-9]{2,4}$"
+        if not re.match(pattern, flight):
+            data = {"error": "Invalid flight identifier. Try something like FR2446 or BA283."}
+            return render_template("index.html", data=data)
 
         try:
             #AviationStack lookup
