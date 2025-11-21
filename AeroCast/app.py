@@ -101,6 +101,9 @@ def home():
             dep_summary = interpret_metar(metar_dep)
             arr_summary = interpret_metar(metar_arr)
 
+            map_data = {"center_lat": 50.0, "center_lon": 0.0}
+
+
             data = {
                 "flight": flight,
                 "airline": airline,
@@ -111,6 +114,7 @@ def home():
                 "calming": calming,
                 "dep_summary": dep_summary,
                 "arr_summary": arr_summary,
+                "map":map_data
             }
 
         except Exception as e:
