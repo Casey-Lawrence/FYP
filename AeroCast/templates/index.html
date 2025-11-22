@@ -32,8 +32,33 @@
 
                 <p><strong>Route:</strong> {{ data.route }}</p>
                 <p><strong>Status:</strong> {{ data.status }}</p>
-
+                
                 <hr>
+
+                <h6>Flight Times</h6>
+
+                <p class="small-text">
+                    <strong>Takeoff:</strong>
+                    {% if data.dep_actual %}
+                        {{ data.dep_actual }}
+                    {% elif data.dep_scheduled %}
+                        {{ data.dep_scheduled }} (scheduled)
+                    {% else %}
+                        Not available
+                    {% endif %}
+                </p>
+
+                <p class="small-text">
+                    <strong>Landing:</strong>
+                    {% if data.arr_actual %}
+                        {{ data.arr_actual }}
+                    {% elif data.arr_scheduled %}
+                        {{ data.arr_scheduled }} (scheduled)
+                    {% else %}
+                        Not available
+                    {% endif %}
+                </p>
+
 
                 <h6>Departure Weather</h6>
                 <p class="small-text">{{ data.dep_summary }}</p>

@@ -3,10 +3,27 @@ import requests
 import os
 from airports import AIRPORTS, AIRPORT_LOOKUP
 import re
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 app = Flask(__name__)
 
 AVIATIONSTACK_KEY = os.getenv("AVIATIONSTACK_KEY")
+
+
+def format_time(ts):
+    if not ts:
+        return None
+    try:
+        # Parse with timezone included
+        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+
+        # Convert to Ireland local time
+        irish_time = dt.astimezone(ZoneInfo("Europe/Dublin"))
+
+        return irish_time.strftime("%H:%M, %d %b %Y")
+    except:
+        return ts
 
 
 def get_airport_name(icao):
@@ -61,8 +78,7 @@ def home():
             fdata = requests.get(flight_url, timeout=10).json()
 
             dep_icao = arr_icao = airline = route = status = None
-            source = None
-            lat = lon = None
+            
 
             if fdata.get("data"):
                 flight_info = fdata["data"][0]
@@ -73,7 +89,11 @@ def home():
                 arr_name = get_airport_name(arr_icao)
                 route = f"{dep_name} ({dep_icao}) -> {arr_name} ({arr_icao})"
                 status = flight_info.get("flight_status", "unknown").capitalize()
-                
+                dep_scheduled = flight_info["departure"].get("scheduled")
+                dep_actual = flight_info["departure"].get("actual")
+                arr_scheduled = flight_info["arrival"].get("scheduled")
+                arr_actual = flight_info["arrival"].get("actual")
+
             else:
                 data = {"error": f"No flight found for {flight}."}
                 return render_template("index.html", data=data)
@@ -129,7 +149,10 @@ def home():
                 "airline": airline,
                 "route": route,
                 "status": status,
-                "source": source,
+                "dep_scheduled": format_time(dep_scheduled),
+                "dep_actual": format_time(dep_actual),
+                "arr_scheduled": format_time(arr_scheduled),
+                "arr_actual": format_time(arr_actual),
                 "risk": risk,
                 "calming": calming,
                 "dep_summary": dep_summary,
