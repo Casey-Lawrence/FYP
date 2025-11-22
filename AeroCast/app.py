@@ -135,8 +135,6 @@ def home():
                 "dep_summary": dep_summary,
                 "arr_summary": arr_summary,
                 "map":map_data,
-                "raw_metar_dep": metar_dep,
-                "raw_metar_arr": metar_arr,
             }
 
         except Exception as e:

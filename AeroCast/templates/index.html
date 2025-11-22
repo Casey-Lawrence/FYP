@@ -47,22 +47,6 @@
                 <p><strong>{{ data.risk }}</strong></p>
                 <hr>
 
-                <p>
-                <a class="btn btn-link p-0" data-bs-toggle="collapse" href="#rawMetar">
-                    Show raw METAR data
-                </a>
-                </p>
-
-                <div class="collapse" id="rawMetar">
-                <div class="small-text">
-                    <strong>Departure METAR:</strong><br>
-                    {{ data.raw_metar_dep }}<br><br>
-
-                    <strong>Arrival METAR:</strong><br>
-                    {{ data.raw_metar_arr }}
-                </div>
-                </div>
-
                 {% if data.calming %}
                     <div class="alert alert-secondary">
                         <strong>Calming Tip</strong>
