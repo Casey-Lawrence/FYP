@@ -1,4 +1,6 @@
 import pandas as pd
+import requests
+from shapely.geometry import Polygon, Point
 
 # Airport List (Major Airports)
 # These are used to test METAR + SIGMET integration
@@ -48,3 +50,39 @@ MAJOR_AIRPORTS = [
 df_airports = pd.DataFrame(MAJOR_AIRPORTS, columns=["icao", "lat", "lon"])
 
 print("Loaded airport dataset:", len(df_airports), "airports")
+
+def parse_visibility(v):
+    if v is None:
+        return None
+    if isinstance(v, (int, float)):
+        return float(v)
+    if "+" in v:
+        return float(v.replace("+", ""))
+    return float(v)
+
+def get_metar(icao):
+    url = f"https://aviationweather.gov/api/data/metar?ids={icao}&format=json"
+    
+    try:
+        data = requests.get(url, timeout=4).json()
+        if not data:
+            return {"icao": icao, "wind": None, "visibility": None, "pressure": None, "lat": None, "lon": None}
+
+        j = data[0]
+
+        return {
+            "icao": icao,
+            "wind": j.get("wspd"),
+            "visibility": parse_visibility(j.get("visib")),
+            "pressure": j.get("altim"),
+            "lat": j.get("lat"),
+            "lon": j.get("lon")
+        }
+    except Exception as e:
+        print("Error fetching METAR for:", icao, e)
+        return {"icao": icao, "wind": None, "visibility": None, "pressure": None, "lat": None, "lon": None}
+
+metar_rows = [get_metar(icao) for icao in df_airports["icao"]]
+df_metar = pd.DataFrame(metar_rows)
+
+print(df_metar)
