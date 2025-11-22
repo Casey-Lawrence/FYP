@@ -45,6 +45,10 @@ MAJOR_AIRPORTS = [
 
     ("FAOR", -26.1337, 28.2420),
     ("HKJK", -1.3192, 36.9278),
+    ("FACT", -33.9648, 18.6017),
+    ("FAGG", -29.6107, 30.3785),
+    ("DTTA", 36.8510, 10.2272),
+    ("LHBP", 47.4369, 19.2550),
 ]
 
 df_airports = pd.DataFrame(MAJOR_AIRPORTS, columns=["icao", "lat", "lon"])
@@ -82,7 +86,48 @@ def get_metar(icao):
         print("Error fetching METAR for:", icao, e)
         return {"icao": icao, "wind": None, "visibility": None, "pressure": None, "lat": None, "lon": None}
 
+
 metar_rows = [get_metar(icao) for icao in df_airports["icao"]]
 df_metar = pd.DataFrame(metar_rows)
 
 print(df_metar)
+
+url = "https://aviationweather.gov/api/data/isigmet?format=json&hazard=turb"
+sigmets = requests.get(url, timeout=4).json()
+
+CRUISE_LOW = 0
+CRUISE_HIGH = 40000
+
+turb_polygons = []
+
+for s in sigmets:
+    base = s.get("base") or 0
+    top = s.get("top") or 60000
+
+    if not (top >= CRUISE_LOW and base <= CRUISE_HIGH):
+        continue
+
+    coords = s.get("coords", [])
+    if len(coords) > 2:
+        poly = Polygon([(c["lon"], c["lat"]) for c in coords])
+        turb_polygons.append(poly)
+
+len(turb_polygons)
+
+def airport_in_turb(row):
+    point = Point(row["lon"], row["lat"])
+    for poly in turb_polygons:
+        if poly.contains(point):
+            return 1
+    return 0
+
+df = df_airports.merge(df_metar, on="icao", how="left")
+
+# Prefer METAR lat/lon if provided
+df["lat"] = df["lat_y"].fillna(df["lat_x"])
+df["lon"] = df["lon_y"].fillna(df["lon_x"])
+
+df = df.drop(columns=["lat_x", "lat_y", "lon_x", "lon_y"])
+
+df["label"] = df.apply(airport_in_turb, axis=1)
+print(df)
