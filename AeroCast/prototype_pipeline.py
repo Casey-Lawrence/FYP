@@ -1,6 +1,8 @@
 import pandas as pd
 import requests
 from shapely.geometry import Polygon, Point
+from sklearn.ensemble import RandomForestClassifier
+
 
 # Airport List (Major Airports)
 # These are used to test METAR + SIGMET integration
@@ -130,4 +132,11 @@ df["lon"] = df["lon_y"].fillna(df["lon_x"])
 df = df.drop(columns=["lat_x", "lat_y", "lon_x", "lon_y"])
 
 df["label"] = df.apply(airport_in_turb, axis=1)
-print(df)
+
+X = df[["wind", "visibility", "pressure"]]
+y = df["label"]
+
+model = RandomForestClassifier()
+model.fit(X, y)
+
+print(model.predict(X))
