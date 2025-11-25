@@ -5,11 +5,16 @@ from airports import AIRPORTS, AIRPORT_LOOKUP
 import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
+import logging
 
 app = Flask(__name__)
 
 AVIATIONSTACK_KEY = os.getenv("AVIATIONSTACK_KEY")
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
 
 def format_time(ts):
     if not ts:
@@ -66,6 +71,7 @@ def home():
 
     if request.method == "POST":
         flight = request.form.get("flight").strip().upper()
+        logging.info(f"User searched for flight: {flight}")
         #Validate flight number
         pattern = r"^[A-Z]{2,3}[0-9]{2,4}$"
         if not re.match(pattern, flight):
@@ -95,6 +101,7 @@ def home():
                 arr_actual = flight_info["arrival"].get("actual")
 
             else:
+                logging.error(f"No flight data found for {flight}. API returned empty result.")
                 data = {"error": f"No flight found for {flight}."}
                 return render_template("index.html", data=data)
 
@@ -108,7 +115,7 @@ def home():
 
             combined = metar_dep + metar_arr
 
-            # --- Simple turbulence risk logic ---
+            # Simple turbulence risk logic 
             risk = "Smooth"
             if any(x in combined for x in ["BKN", "OVC", "SHRA", "CB", "BR", "RA"]):
                 risk = "Light"
