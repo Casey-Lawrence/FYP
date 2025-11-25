@@ -73,7 +73,7 @@ def home():
         flight = request.form.get("flight").strip().upper()
         logging.info(f"User searched for flight: {flight}")
         #Validate flight number
-        pattern = r"^[A-Z]{2,3}[0-9]{2,4}$"
+        pattern = r"^[A-Z]{1,3}[0-9]{1,5}$"
         if not re.match(pattern, flight):
             data = {"error": "Invalid flight identifier. Try something like FR2446 or BA283."}
             return render_template("index.html", data=data)
