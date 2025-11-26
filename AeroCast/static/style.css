@@ -1,6 +1,56 @@
 body {
   font-family: "Segoe UI", Arial, sans-serif;
+  background: #f8f9fa;
+
 }
 .card {
+  border-radius: 10px;
+  padding: 20px;
   background-color: #fff;
+}
+.header-banner {
+    background: #87ceeb;
+    padding: 25px 20px;
+    border-bottom: 1px solid #e1e5eb;
+    text-align: center;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+
+}
+
+.header-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.header-subtitle {
+    font-size: 1.1rem;
+    color: #555;
+}
+#map {
+    height: 300px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+.btn-primary {
+    background-color: #6baecf !important;
+    border-color: #6baecf !important;
+    padding: 8px 20px;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+.btn-primary:hover {
+    background-color: #5a9cbf !important;
+    border-color: #5a9cbf !important;
+}
+
+.search-container {
+    background: white;
+    padding: 20px 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    max-width: 600px;
+    margin: 0 auto 30px auto;
 }
