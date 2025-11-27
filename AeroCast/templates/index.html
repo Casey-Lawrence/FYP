@@ -26,64 +26,86 @@
         {% if data.error %}
             <div class="alert alert-danger text-center">{{ data.error }}</div>
         {% else %}
-            <div class="card-simple mx-auto" style="max-width: 700px;">
-                <h5 class="mb-1">Flight {{ data.flight }}</h5>
-                <div class="small-text mb-3">{{ data.airline }}</div>
+            <div class="container">
 
-                <p><strong>Route:</strong> {{ data.route }}</p>
-                <p><strong>Status:</strong> {{ data.status }}</p>
-                
-                <hr>
+    {% if data %}
+        {% if data.error %}
+            <div class="alert alert-danger text-center">{{ data.error }}</div>
+        {% else %}
 
-                <h6>Flight Times</h6>
+        <div class="row g-4 justify-content-center">
 
-                <p class="small-text">
-                    <strong>Takeoff:</strong>
-                    {% if data.dep_actual %}
-                        {{ data.dep_actual }}
-                    {% elif data.dep_scheduled %}
-                        {{ data.dep_scheduled }} (scheduled)
-                    {% else %}
-                        Not available
+            <!-- LEFT COLUMN: Flight details -->
+            <div class="col-lg-6 col-md-12">
+                <div class="card-simple">
+                    <h5 class="mb-1">Flight {{ data.flight }}</h5>
+                    <div class="small-text mb-3">{{ data.airline }}</div>
+
+                    <p><strong>Route:</strong> {{ data.route }}</p>
+                    <p><strong>Status:</strong> {{ data.status }}</p>
+
+                    <hr>
+
+                    <h6>Flight Times</h6>
+
+                    <p class="small-text">
+                        <strong>Takeoff:</strong>
+                        {% if data.dep_actual %}
+                            {{ data.dep_actual }}
+                        {% elif data.dep_scheduled %}
+                            {{ data.dep_scheduled }} (scheduled)
+                        {% else %}
+                            Not available
+                        {% endif %}
+                    </p>
+
+                    <p class="small-text">
+                        <strong>Landing:</strong>
+                        {% if data.arr_actual %}
+                            {{ data.arr_actual }}
+                        {% elif data.arr_scheduled %}
+                            {{ data.arr_scheduled }} (scheduled)
+                        {% else %}
+                            Not available
+                        {% endif %}
+                    </p>
+
+                    <h6>Departure Weather</h6>
+                    <p class="small-text">{{ data.dep_summary }}</p>
+
+                    <h6>Arrival Weather</h6>
+                    <p class="small-text">{{ data.arr_summary }}</p>
+
+                    <hr>
+
+                    <h6>Turbulence Risk</h6>
+                    <p><strong>{{ data.risk }}</strong></p>
+
+                    {% if data.calming %}
+                        <div class="alert alert-secondary mt-3">
+                            <strong>Calming Tip</strong>
+                            <p class="small-text mb-0">{{ data.calming }}</p>
+                        </div>
                     {% endif %}
-                </p>
-
-                <p class="small-text">
-                    <strong>Landing:</strong>
-                    {% if data.arr_actual %}
-                        {{ data.arr_actual }}
-                    {% elif data.arr_scheduled %}
-                        {{ data.arr_scheduled }} (scheduled)
-                    {% else %}
-                        Not available
-                    {% endif %}
-                </p>
-
-
-                <h6>Departure Weather</h6>
-                <p class="small-text">{{ data.dep_summary }}</p>
-
-                <h6>Arrival Weather</h6>
-                <p class="small-text">{{ data.arr_summary }}</p>
-
-                <hr>
-
-                <h6>Turbulence Risk</h6>
-                <p><strong>{{ data.risk }}</strong></p>
-                <hr>
-
-                {% if data.calming %}
-                    <div class="alert alert-secondary">
-                        <strong>Calming Tip</strong>
-                        <p class="small-text mb-0">{{ data.calming }}</p>
-                    </div>
-                {% endif %}
-
-                {% if data.map %}
-                    <div id="map"></div>
-                    <h6 class="mt-4">Route Map</h6>
-                {% endif %}
+                </div>
             </div>
+
+            <!-- RIGHT COLUMN: Map -->
+            {% if data.map %}
+            <div class="col-lg-6 col-md-12">
+                <div class="card-simple">
+                    <h6 class="mb-3">Route Map</h6>
+                    <div id="map"></div>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+        {% endif %}
+    {% endif %}
+
+</div>
+
         {% endif %}
     {% endif %}
 </div>
