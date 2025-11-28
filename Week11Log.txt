@@ -1,7 +1,0 @@
-This week, I mainly focused on developing my code for the interim submission. I spent most of my time improving the functionality of the prototype, refining how the flight and weather data are handled, and making sure everything worked reliably for the interim demo.
-
-I also met with my supervisor,  I asked him about using AviationWeather.gov's cached data, and he said it was okay for me to use that, but i think i will wait until after the interim to use that as it will require some more time to implement it for such a large dataset . 
-
-He reminded me to include a proper README on my GitHub and to look into deployment options like Google Run. Overall, he said I'm on track. 
-
-Outside of the meeting, I mainly continued improving the codebase and preparing the features I wanted ready for the interim demo.
