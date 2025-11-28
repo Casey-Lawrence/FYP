@@ -172,6 +172,17 @@ def home():
 
     return render_template("index.html", data=data)
 
+@app.route("/sigmets")
+def sigmet_page():
+    try:
+        url = "https://aviationweather.gov/api/data/isigmet?format=json&hazard=turb"
+        sigmets = requests.get(url, timeout=5).json()
+    except Exception as e:
+        sigmets = []
+        print("SIGMET fetch error:", e)
+
+    return render_template("sigmets.html", sigmets=sigmets)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
