@@ -10,6 +10,7 @@
 </head>
 
 <body>
+
 <div class="header-banner d-flex flex-column align-items-center justify-content-center mb-4">
     <h1 class="header-title">AeroCast</h1>
     <p class="header-subtitle">Flight Turbulence Forecast</p>
@@ -21,19 +22,14 @@
         <button class="btn btn-primary">Search</button>
     </form>
 </div>
+
 <div class="text-center mb-4">
     <a href="/sigmets" class="btn btn-outline-primary">
         View Global Turbulence Map
     </a>
 </div>
 
-
-    {% if data %}
-        {% if data.error %}
-            <div class="alert alert-danger text-center">{{ data.error }}</div>
-        {% else %}
-            <div class="container">
-
+<div class="container">
     {% if data %}
         {% if data.error %}
             <div class="alert alert-danger text-center">{{ data.error }}</div>
@@ -43,7 +39,7 @@
 
             <!-- LEFT COLUMN: Flight details -->
             <div class="col-lg-6 col-md-12">
-                <div class="card-simple">
+                <div class="card">
                     <h5 class="mb-1">Flight {{ data.flight }}</h5>
                     <div class="small-text mb-3">{{ data.airline }}</div>
 
@@ -107,14 +103,12 @@
             {% endif %}
 
         </div>
+
         {% endif %}
     {% endif %}
 
 </div>
 
-        {% endif %}
-    {% endif %}
-</div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 {% if data.map %}

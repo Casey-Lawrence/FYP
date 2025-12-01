@@ -28,11 +28,11 @@ body {
     font-size: 1.1rem;
     color: #555;
 }
-#map {
-    height: 300px;
-    border-radius: 8px;
-    margin-bottom: 15px;
+.small-text {
+    font-size: 0.9rem;
+    color: #555;
 }
+
 .btn-primary {
     background-color: #6baecf !important;
     border-color: #6baecf !important;
@@ -54,10 +54,17 @@ body {
     max-width: 600px;
     margin: 0 auto 30px auto;
 }
+
 #sigmet-map {
     height: 600px !important;
     width: 100%;
     border-radius: 8px;
     margin-bottom: 20px;
     background: #eee;  /* debugging */
+}
+
+#map {
+    height: 300px;
+    border-radius: 8px;
+    margin-bottom: 15px;
 }

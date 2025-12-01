@@ -1,3 +1,6 @@
+#prototype_pipeline.py not integrated into main app yet
+#purely for experimenting with data pipeline and model prototyping
+
 import pandas as pd
 import requests
 from shapely.geometry import Polygon, Point
@@ -113,8 +116,6 @@ for s in sigmets:
     if len(coords) > 2:
         poly = Polygon([(c["lon"], c["lat"]) for c in coords])
         turb_polygons.append(poly)
-
-len(turb_polygons)
 
 def airport_in_turb(row):
     point = Point(row["lon"], row["lat"])
