@@ -116,9 +116,17 @@
     const mapData = {{ data.map | tojson }};
     const routeMap = L.map('map').setView([mapData.center_lat, mapData.center_lon], 3);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 8
-    }).addTo(routeMap);
+    L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+        {
+            attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+            subdomains: "abcd",
+            maxZoom: 19
+        }
+    ).addTo(routeMap);
+
+
+
 
     // Departure marker
     if (mapData.dep_lat && mapData.dep_lon) {

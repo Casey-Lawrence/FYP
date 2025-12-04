@@ -34,9 +34,14 @@
 
     const map = L.map("sigmet-map").setView([20, 0], 2);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 8
-    }).addTo(map);
+    L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+        {   
+            attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+            subdomains: "abcd",
+            maxZoom: 19
+        }
+    ).addTo(map);
 
     sigmets.forEach(s => {
         if (!s.coords || s.coords.length < 3) return;
