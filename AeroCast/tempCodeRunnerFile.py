@@ -1,0 +1,1 @@
+https://aviationweather.gov/api/data/isigmet?format=json&hazard=turb

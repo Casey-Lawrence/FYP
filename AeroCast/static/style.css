@@ -68,3 +68,19 @@ body {
     border-radius: 8px;
     margin-bottom: 15px;
 }
+.sigmet-legend {
+    background: white;
+    padding: 10px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.sigmet-legend .box {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+    border: 1px solid #ccc;
+}

@@ -36,25 +36,76 @@
 
     L.tileLayer(
         "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-        {   
+        {
             attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
             subdomains: "abcd",
             maxZoom: 19
         }
     ).addTo(map);
 
+
+    // Get color based on hazard type + qualifier
+    function getSigmetColor(hazard) {
+        const h = (hazard || "").toLowerCase();
+
+        // TURBULENCE 
+        if (h.includes("turb")) return "#ff0000";
+
+        // ICING
+        if (h.includes("ice")) return "#00bfff";       // blue
+
+        // THUNDERSTORMS
+        if (h.includes("ts")) return "#ff7b00";        // orange-ish for storms
+
+        // fallback / unknown
+        return "#7ec8ff";   // light blue
+    }
+
+
+    // Draw polygons (supports simple AREA polygons)
     sigmets.forEach(s => {
-        if (!s.coords || s.coords.length < 3) return;
+        if (!s.coords) return;
 
-        const latlngs = s.coords.map(c => [c.lat, c.lon]);
+        // Handle both AREA (single polygon) and AREAS (multiple polygon groups)
+        const polygonGroups = Array.isArray(s.coords[0]) ? s.coords : [s.coords];
 
-        L.polygon(latlngs, {
-            color: "red",
-            weight: 2,
-            fillOpacity: 0.3
-        }).addTo(map);
+        polygonGroups.forEach(group => {
+            if (group.length < 3) return;
+
+            const latlngs = group.map(c => [c.lat, c.lon]);
+            const color = getSigmetColor(s.hazard);
+
+            L.polygon(latlngs, {
+                color: color,
+                weight: 2,
+                fillOpacity: 0.25
+            }).addTo(map);
+        })
     });
+
+
+    // Legend
+    const legend = L.control({ position: "bottomleft" });
+
+    legend.onAdd = function () {
+        const div = L.DomUtil.create("div", "sigmet-legend");
+        div.innerHTML = `
+            <h6 style="margin-bottom:6px;">SIGMET Hazards</h6>
+
+            <div><span class="box" style="background:#ff0000"></span> Turbulence </div>
+
+            <div><span class="box" style="background:#00bfff"></span> Icing</div>
+
+            <div><span class="box" style="background:#ff7b00"></span> Thunderstorms</div>
+
+            <div><span class="box" style="background:#7ec8ff"></span> Other Hazards</div>
+        `;
+        return div;
+    };
+
+    legend.addTo(map);
 </script>
+
 
 
 </body>

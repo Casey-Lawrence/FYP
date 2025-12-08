@@ -175,7 +175,7 @@ def home():
 @app.route("/sigmets")
 def sigmet_page():
     try:
-        url = "https://aviationweather.gov/api/data/isigmet?format=json&hazard=turb"
+        url = "https://aviationweather.gov/api/data/isigmet?format=json"
         sigmets = requests.get(url, timeout=5).json()
     except Exception as e:
         sigmets = []
