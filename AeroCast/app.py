@@ -6,10 +6,15 @@ import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import logging
+from flask import jsonify
+import csv
 
 app = Flask(__name__)
 
 AVIATIONSTACK_KEY = os.getenv("AVIATIONSTACK_KEY")
+
+DATA_FILE = r"C:\Users\casey\OneDrive - Technological University Dublin\AeroCastData\aerocast_dataset.csv"
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -183,6 +188,26 @@ def sigmet_page():
 
     return render_template("sigmets.html", sigmets=sigmets)
 
+@app.route("/api/aircraft")
+def aircraft_api():
+    aircraft = []
+
+    with open(DATA_FILE, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+
+        # Return only latest snapshot (important for visuals)
+        rows = list(reader)[-2000:]
+
+        for r in rows:
+            aircraft.append({
+                "lat": float(r["lat"]),
+                "lon": float(r["lon"]),
+                "altitude_m": r["altitude_m"],
+                "callsign": r["callsign"],
+                "sigmet_flag": int(r["sigmet_flag"]) if r["sigmet_flag"] else 0
+            })
+
+    return jsonify(aircraft)
 
 if __name__ == "__main__":
     app.run(debug=True)

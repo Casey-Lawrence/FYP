@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <title>AeroCast</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.114/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.114/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 
 </head>
 
@@ -92,15 +94,15 @@
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: Map -->
             {% if data.map %}
             <div class="col-lg-6 col-md-12">
                 <div class="card-simple">
-                    <h6 class="mb-3">Route Map</h6>
-                    <div id="map"></div>
+                    <h6 class="mb-3">3D Airspace & Route View</h6>
+                    <div id="cesiumContainer" style="height: 520px;"></div>
                 </div>
             </div>
             {% endif %}
+
 
         </div>
 
@@ -108,56 +110,89 @@
     {% endif %}
 
 </div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 {% if data.map %}
 <script>
-    const mapData = {{ data.map | tojson }};
-    const routeMap = L.map('map').setView([mapData.center_lat, mapData.center_lon], 3);
+    Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5MjJlNTk4OC1iOTk4LTQ3ZTYtOTkyNS02NzA4NmU4ODNiNzYiLCJpZCI6MzcxOTUyLCJpYXQiOjE3NjY0Mzc5ODV9.SvqHMzXeT-L3xXoyjBy8pw9z4vjwppzcm9uuUfpEdus";
 
-    L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-        {
-            attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-            subdomains: "abcd",
-            maxZoom: 19
+    const viewer = new Cesium.Viewer("cesiumContainer", {
+        timeline: false,
+        animation: false,
+        geocoder: false,
+        homeButton: false,
+        sceneModePicker: false,
+        navigationHelpButton: false,
+        baseLayerPicker: false,
+        baseLayer: Cesium.ImageryLayer.fromWorldImagery()
+    });
+
+    // Centre globe on route midpoint
+    viewer.camera.setView({
+        destination: Cesium.Cartesian3.fromDegrees(
+            {{ data.map.center_lon }},
+            {{ data.map.center_lat }},
+            12000000
+        )
+    });
+
+    // Route line
+    viewer.entities.add({
+        polyline: {
+            positions: Cesium.Cartesian3.fromDegreesArray([
+                {{ data.map.dep_lon }}, {{ data.map.dep_lat }},
+                {{ data.map.arr_lon }}, {{ data.map.arr_lat }}
+            ]),
+            width: 3,
+            material: Cesium.Color.CYAN
         }
-    ).addTo(routeMap);
-
-
-
+    });
 
     // Departure marker
-    if (mapData.dep_lat && mapData.dep_lon) {
-        L.marker([mapData.dep_lat, mapData.dep_lon])
-            .addTo(routeMap)
-            .bindPopup("Departure Airport");
-    }
+    viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(
+            {{ data.map.dep_lon }},
+            {{ data.map.dep_lat }}
+        ),
+        point: { pixelSize: 8, color: Cesium.Color.BLUE },
+        label: {
+            text: "Departure",
+            font: "12px sans-serif",
+            pixelOffset: new Cesium.Cartesian2(0, -18)
+        }
+    });
 
     // Arrival marker
-    if (mapData.arr_lat && mapData.arr_lon) {
-        L.marker([mapData.arr_lat, mapData.arr_lon])
-            .addTo(routeMap)
-            .bindPopup("Arrival Airport");
-    }
+    viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(
+            {{ data.map.arr_lon }},
+            {{ data.map.arr_lat }}
+        ),
+        point: { pixelSize: 8, color: Cesium.Color.ORANGE },
+        label: {
+            text: "Arrival",
+            font: "12px sans-serif",
+            pixelOffset: new Cesium.Cartesian2(0, -18)
+        }
+    });
 
-    // Draw route line between airports
-    if (mapData.dep_lat && mapData.arr_lat) {
-    const routeLine = L.polyline(
-        [
-            [mapData.dep_lat, mapData.dep_lon],
-            [mapData.arr_lat, mapData.arr_lon]
-        ],
-        { color: "blue", weight: 3, opacity: 0.7 }
-    ).addTo(routeMap);
-
-    // Fit map to route
-    routeMap.fitBounds(routeLine.getBounds(), { padding: [40, 40] });
-}
-
+    // Aircraft risk points
+    fetch("/api/aircraft")
+        .then(res => res.json())
+        .then(data => {
+            data.forEach(ac => {
+                viewer.entities.add({
+                    position: Cesium.Cartesian3.fromDegrees(ac.lon, ac.lat),
+                    point: {
+                        pixelSize: 6,
+                        color: ac.sigmet_flag ? Cesium.Color.RED : Cesium.Color.LIME,
+                        outlineColor: Cesium.Color.BLACK,
+                        outlineWidth: 1
+                    }
+                });
+            });
+        });
 </script>
 {% endif %}
+
 
 </body>
 </html>
