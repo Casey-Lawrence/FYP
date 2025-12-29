@@ -174,22 +174,65 @@
         }
     });
 
-    // Aircraft risk points
-    fetch("/api/aircraft")
-        .then(res => res.json())
-        .then(data => {
-            data.forEach(ac => {
+const icao24 = "{{ data.icao24 }}";
+
+if (!icao24 || icao24 === "None") {
+    console.warn("Live tracking unavailable (no ICAO24)");
+} else {
+
+    let trail = [];
+
+    const planeEntity = viewer.entities.add({
+        billboard: {
+            image: "/static/plane.png",
+            width: 32,
+            height: 32
+        },
+        label: {
+            text: "{{ data.flight }}",
+            pixelOffset: new Cesium.Cartesian2(0, -30)
+        }
+    });
+
+    function updateAircraft() {
+        fetch(`/api/live-aircraft/${icao24}`)
+            .then(res => res.json())
+            .then(ac => {
+
+                if (!ac || ac.lat === null || ac.lon === null) {
+                    console.warn("Aircraft not currently visible in OpenSky");
+                    return;
+                }
+
+                trail.push(ac.lon, ac.lat);
+
+                planeEntity.position = Cesium.Cartesian3.fromDegrees(
+                    ac.lon,
+                    ac.lat,
+                    ac.altitude || 10000
+                );
+
+                if (ac.heading !== null) {
+                    planeEntity.billboard.rotation =
+                        Cesium.Math.toRadians(ac.heading);
+                }
+
                 viewer.entities.add({
-                    position: Cesium.Cartesian3.fromDegrees(ac.lon, ac.lat),
-                    point: {
-                        pixelSize: 6,
-                        color: ac.sigmet_flag ? Cesium.Color.RED : Cesium.Color.LIME,
-                        outlineColor: Cesium.Color.BLACK,
-                        outlineWidth: 1
+                    polyline: {
+                        positions: Cesium.Cartesian3.fromDegreesArray(trail),
+                        width: 2,
+                        material: Cesium.Color.YELLOW.withAlpha(0.6)
                     }
                 });
-            });
-        });
+            })
+            .catch(err => console.error("Live aircraft fetch failed:", err));
+    }
+
+    updateAircraft();
+    setInterval(updateAircraft, 10000);
+}
+
+
 </script>
 {% endif %}
 

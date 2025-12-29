@@ -1,19 +1,48 @@
 from flask import Flask, render_template, request
 import requests
 import os
-from airports import AIRPORTS, AIRPORT_LOOKUP
+from airports import AIRPORT_LOOKUP
 import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import logging
 from flask import jsonify
-import csv
-
+import time
 app = Flask(__name__)
 
 AVIATIONSTACK_KEY = os.getenv("AVIATIONSTACK_KEY")
+OPENSKY_CLIENT_ID = os.getenv("OPENSKY_CLIENT_ID")
+OPENSKY_CLIENT_SECRET = os.getenv("OPENSKY_CLIENT_SECRET")
 
-DATA_FILE = r"C:\Users\casey\OneDrive - Technological University Dublin\AeroCastData\aerocast_dataset.csv"
+_opensky_token = None
+_opensky_token_expiry = 0
+
+
+def get_opensky_token():
+    global _opensky_token, _opensky_token_expiry
+
+    if _opensky_token and time.time() < _opensky_token_expiry:
+        return _opensky_token
+
+    response = requests.post(
+        "https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token",
+        data={
+            "grant_type": "client_credentials",
+            "client_id": OPENSKY_CLIENT_ID,
+            "client_secret": OPENSKY_CLIENT_SECRET,
+        },
+        timeout=10
+    )
+
+    response.raise_for_status()
+    token_data = response.json()
+
+    _opensky_token = token_data["access_token"]
+    _opensky_token_expiry = time.time() + token_data["expires_in"] - 60
+
+    logging.info("New OpenSky token obtained")
+
+    return _opensky_token
 
 
 logging.basicConfig(
@@ -93,6 +122,11 @@ def home():
 
             if fdata.get("data"):
                 flight_info = fdata["data"][0]
+                aircraft_info = flight_info.get("aircraft") or {}
+                icao24 = aircraft_info.get("icao24")
+
+                logging.info(f"ICAO24 from AviationStack for {flight}: {icao24}")
+
                 dep_icao = flight_info["departure"].get("icao")
                 arr_icao = flight_info["arrival"].get("icao")
                 airline = flight_info["airline"]["name"]
@@ -117,7 +151,7 @@ def home():
             metar_arr = requests.get(
                 f"https://aviationweather.gov/api/data/metar?ids={arr_icao}&format=raw&hours=3"
             ).text.strip()
-
+ 
             combined = metar_dep + metar_arr
 
             # Simple turbulence risk logic 
@@ -170,7 +204,9 @@ def home():
                 "dep_summary": dep_summary,
                 "arr_summary": arr_summary,
                 "map":map_data,
+                "icao24": icao24
             }
+            logging.info(f"ICAO24 from AviationStack: {icao24}")
 
         except Exception as e:
             data = {"error": str(e)}
@@ -188,26 +224,33 @@ def sigmet_page():
 
     return render_template("sigmets.html", sigmets=sigmets)
 
-@app.route("/api/aircraft")
-def aircraft_api():
-    aircraft = []
 
-    with open(DATA_FILE, newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
+@app.route("/api/live-aircraft/<icao24>")
+def live_aircraft_by_icao24(icao24):
+    url = "https://opensky-network.org/api/states/all"
 
-        # Return only latest snapshot (important for visuals)
-        rows = list(reader)[-2000:]
+    token = get_opensky_token()
 
-        for r in rows:
-            aircraft.append({
-                "lat": float(r["lat"]),
-                "lon": float(r["lon"]),
-                "altitude_m": r["altitude_m"],
-                "callsign": r["callsign"],
-                "sigmet_flag": int(r["sigmet_flag"]) if r["sigmet_flag"] else 0
+    response = requests.get(
+        url,
+        headers={"Authorisation": f"Bearer {token}"},
+        timeout=10
+    )
+    data = response.json()
+
+    for s in data.get("states", []):
+        if s[0] == icao24.lower():
+            return jsonify({
+                "icao24": s[0],
+                "callsign": s[1].strip() if s[1] else None,
+                "lon": s[5],
+                "lat": s[6],
+                "heading": s[10],
+                "altitude": s[7]
             })
 
-    return jsonify(aircraft)
+    return jsonify(None)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
